@@ -58,7 +58,7 @@ public class PortfolioItemService {
 
     }
 
-    private  void updatePortfolioValue(List<PortfolioItem> res, Portfolio portfolio,Userr userr) {
+    public void updatePortfolioValue(List<PortfolioItem> res, Portfolio portfolio,Userr userr) {
         long totalInvestmentAmount = 0;
         long totalCurrentValue = 0;
 
