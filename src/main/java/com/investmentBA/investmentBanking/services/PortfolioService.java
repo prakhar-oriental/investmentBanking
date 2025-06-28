@@ -63,7 +63,7 @@ public class PortfolioService {
                itemsDto.setCurrentValue((long) (portfolioItem.getQuantity()*portfolioItem.getProduct().getNav()));
                itemsDto.setInvestedAmount(portfolioItem.getInvestedAmount());
                itemsDto.setQuantity(portfolioItem.getQuantity());
-               itemsDto.setProductId(portfolioItem.getPortfolio().getId());
+               itemsDto.setProductId(portfolioItem.getProduct().getId());
                itemsDto.setProductName(portfolioItem.getProduct().getName());
                itemsDto.setProductType(String.valueOf(portfolioItem.getProduct().getType()));
                if(portfolioItem.getQuantity()*portfolioItem.getProduct().getNav()>portfolioItem.getInvestedAmount()){
