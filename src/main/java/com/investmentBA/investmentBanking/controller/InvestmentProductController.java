@@ -1,26 +1,33 @@
 package com.investmentBA.investmentBanking.controller;
 
+import com.investmentBA.investmentBanking.exception.InvalidNullObj;
 import com.investmentBA.investmentBanking.model.InvestmentProduct;
 import com.investmentBA.investmentBanking.services.AlphaVantageService;
 import com.investmentBA.investmentBanking.services.InvestmentProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+@Validated
 @RequestMapping("/Investment")
 public class InvestmentProductController {
     @Autowired private InvestmentProductService productService;
     @Autowired private AlphaVantageService vantageService;
 
     @PostMapping("/addProduct")
-    public ResponseEntity<?> addProduct(@RequestBody InvestmentProduct investmentProduct)
+    public ResponseEntity<?> addProduct(@Valid @RequestBody InvestmentProduct investmentProduct)
     {
+        if(investmentProduct==null ){
+           throw new InvalidNullObj("Null object recived"+investmentProduct);
+        }
         InvestmentProduct ans = productService.addProduct(investmentProduct);
         return new ResponseEntity<>(ans, HttpStatus.CREATED);
     }
