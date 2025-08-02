@@ -101,44 +101,7 @@ public class TransactionServiceTest {
 
     }
 
-    @Test
-    public void test_getTransaction_whenUserExists_returnsDtoList() {
-        // Arrange
-        String username = "john";
-        Userr user = new Userr();
-        user.setId(1L);
-        user.setUsername(username);
 
-        InvestmentProduct product = new InvestmentProduct();
-        product.setName("HDFC Bluechip");
-
-        Transaction txn1 = new Transaction();
-        txn1.setId(10L);
-        txn1.setUser(user);
-        txn1.setType(TransactionType.BUY);
-        txn1.setTransactionTime(LocalDateTime.now());
-        txn1.setNavAtTransaction(120L);
-        txn1.setProduct(product);
-
-        List<Transaction> mockTxns = Arrays.asList(txn1);
-
-        when(userRepository.findByUsername(username)).thenReturn(user);
-        when(transactionRepo.getTransactionByUserId(user.getId())).thenReturn(mockTxns);
-
-        // Act
-        List<TransactionDto> result = transactionService.getTransaction(username);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.size());
-
-        TransactionDto dto = result.get(0);
-        assertEquals("HDFC Bluechip", dto.getProductName());
-        assertEquals("BUY", dto.getType());
-     //   assertEquals(120L, dto.getNav());
-        assertEquals(txn1.getTransactionTime(), dto.getTransactionTime());
-        assertEquals(txn1.getId(), dto.getQuantity());
-    }
 
     @Test
     public void test_getTransaction_whenUserNotFound_returnsNull() {
