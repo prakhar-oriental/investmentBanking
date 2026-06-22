@@ -22,6 +22,7 @@ public class Userr {
     private String password;
     private String role;
     private String emailId;
+    private String phoneNumber;
 
 
 }

@@ -5,6 +5,8 @@ import com.investmentBA.investmentBanking.DTO.TransactionDto;
 import com.investmentBA.investmentBanking.DTO.UserPortDto;
 import com.investmentBA.investmentBanking.model.Portfolio;
 import com.investmentBA.investmentBanking.model.Transaction;
+import com.investmentBA.investmentBanking.model.Userr;
+import com.investmentBA.investmentBanking.repository.UserRepository;
 import com.investmentBA.investmentBanking.services.*;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,10 @@ public class TransactionController {
     private PdfGenerator pdfGenerator;
     @Autowired
     private  EmailService emailService;
+    @Autowired
+    private SmsService smsService;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/buyProduct/{username}")
     public ResponseEntity<?> buyProduct(@PathVariable String username, @RequestBody BuySell buySell) throws MessagingException {
@@ -40,19 +46,29 @@ public class TransactionController {
           portfolioItemService.addPortfolioItem(transaction.getUser(), portfolio, buySell);
           ByteArrayInputStream pdf = pdfGenerator.generateTransactionConfirmationPdf(transaction);
           emailService.sendMailWithPdf(transaction.getUser().getEmailId(),pdf);
+//          String message = "Buy Confirmed: " + buySell.getQuantity() + " units of " +
+//                  transaction.getProduct().getName() + " at NAV ₹" +
+//                  transaction.getNavAtTransaction();
+//          Userr existing = userRepository.findByUsername(username);
+//          smsService.sendSMS(existing.getPhoneNumber(), message);
           return new ResponseEntity<>("Buy Success", HttpStatus.OK);
       }else {
           return new ResponseEntity<>("Buy Falied", HttpStatus.OK);
       }
     }
 
-    @GetMapping("/sellProduct/{username}")
+    @PostMapping("/sellProduct/{username}")
     public ResponseEntity<?> sellProduct(@PathVariable String username, @RequestBody BuySell buySell) throws MessagingException {
        String result =   sellProduct.sell(username, buySell);
         if(result.equals("Sell_Success")){
             Transaction transaction =  transactionService.sell(username,buySell.getProductId(), buySell.getQuantity());
             ByteArrayInputStream pdf = pdfGenerator.generateTransactionConfirmationPdf(transaction);
             emailService.sendMailWithPdf(transaction.getUser().getEmailId(),pdf);
+//            String message = "Sell Confirmed: " + buySell.getQuantity() + " units of " +
+//                    transaction.getProduct().getName() + " at NAV ₹" +
+//                    transaction.getNavAtTransaction();
+//            Userr existing = userRepository.findByUsername(username);
+//            smsService.sendSMS(existing.getPhoneNumber(), message);
             return new ResponseEntity<>("Sell Success", HttpStatus.OK);
         }else {
             return new ResponseEntity<>("Sell failed", HttpStatus.CONFLICT);

@@ -2,6 +2,7 @@ package com.investmentBA.investmentBanking.model;
 
 
 import jakarta.persistence.*;
+import jdk.jfr.Name;
 import lombok.*;
 
 import java.math.BigDecimal;

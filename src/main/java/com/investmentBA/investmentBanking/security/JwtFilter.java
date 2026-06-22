@@ -1,5 +1,6 @@
 package com.investmentBA.investmentBanking.security;
 
+import com.investmentBA.investmentBanking.services.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +32,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired private JwtUtil jwtUtil;
-    @Autowired private UserDetailsService userDetailsService;
+    @Autowired private CustomUserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -49,5 +50,6 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request,response);
+
     }
 }

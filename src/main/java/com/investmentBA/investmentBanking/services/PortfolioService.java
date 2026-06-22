@@ -69,8 +69,11 @@ public class PortfolioService {
                if(portfolioItem.getQuantity()*portfolioItem.getProduct().getNav()>portfolioItem.getInvestedAmount()){
                    itemsDto.setProfitOrLoss("Profit");
                    itemsDto.setGainOrLoss((long) (portfolioItem.getQuantity()*portfolioItem.getProduct().getNav()-portfolioItem.getInvestedAmount()));
-               }else{
+               }else if(portfolioItem.getQuantity()*portfolioItem.getProduct().getNav()<portfolioItem.getInvestedAmount()){
                    itemsDto.setProfitOrLoss("Loss");
+                   itemsDto.setGainOrLoss((long) (Math.abs(portfolioItem.getQuantity() * portfolioItem.getProduct().getNav() - portfolioItem.getInvestedAmount())));
+               }else {
+                   itemsDto.setProfitOrLoss("NA");
                    itemsDto.setGainOrLoss((long) (Math.abs(portfolioItem.getQuantity()*portfolioItem.getProduct().getNav()-portfolioItem.getInvestedAmount())));
                }
                itemsDtoList.add(itemsDto);
