@@ -1,6 +1,7 @@
 package com.investmentBA.investmentBanking.controller;
 
 import com.investmentBA.investmentBanking.DTO.BuySell;
+import com.investmentBA.investmentBanking.DTO.PortfolioAnalyticsDto;
 import com.investmentBA.investmentBanking.DTO.TransactionDto;
 import com.investmentBA.investmentBanking.DTO.UserPortDto;
 import com.investmentBA.investmentBanking.model.Portfolio;
@@ -37,6 +38,9 @@ public class TransactionController {
     private SmsService smsService;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PortfolioAnalyticsService portfolioAnalyticsService;
 
     @PostMapping("/buyProduct/{username}")
     public ResponseEntity<?> buyProduct(@PathVariable String username, @RequestBody BuySell buySell) throws MessagingException {
@@ -89,6 +93,26 @@ public class TransactionController {
         if(transactionDtoList!=null){
             return new ResponseEntity<>(transactionDtoList, HttpStatus.OK);
         }else return new ResponseEntity<>("invalid user", HttpStatus.CONFLICT);
+    }
+
+    @GetMapping("/portfolio-analytics/{username}")
+    public ResponseEntity<?> getPortfolioAnalytics(
+            @PathVariable String username) {
+
+        PortfolioAnalyticsDto result =
+                portfolioAnalyticsService.generateAnalytics(username);
+
+        if (result == null) {
+            return new ResponseEntity<>(
+                    "User or portfolio not found",
+                    HttpStatus.NOT_FOUND
+            );
+        }
+
+        return new ResponseEntity<>(
+                result,
+                HttpStatus.OK
+        );
     }
 
 }
